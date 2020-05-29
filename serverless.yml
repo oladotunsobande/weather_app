@@ -10,7 +10,8 @@ service: weather-app
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs8.10
+  region: us-east-1
 
 # The `functions` block defines what code to deploy
 functions:

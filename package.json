@@ -9,13 +9,14 @@
   "author": "Oladotun Sobande <oladutch@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "app-root-path": "^3.0.0",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "glob": "^7.1.6",
-    "joi": "^14.3.1",
     "mongodb-memory-server": "^6.6.1",
-    "mongoose": "^5.9.16"
+    "mongoose": "^5.9.16",
+    "uuid": "^8.1.0"
   },
   "devDependencies": {
     "expect": "^26.0.1",

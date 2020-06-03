@@ -29,7 +29,7 @@ if (process.env.DEBUG != undefined) {
     });
   });
 } else {
-  const db_uri = process.env.MONGO_URL || process.env.DB_URL;
+  const db_uri = process.env.MONGO_URL;
 
   connection = mongoose.createConnection(
     db_uri,

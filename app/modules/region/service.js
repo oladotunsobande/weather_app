@@ -45,12 +45,12 @@ exports.addRegion = async (args) => {
   }
 };
 
-exports.getRegionByName = async (cityName) => {
+exports.getRegionByName = async (args) => {
   try{
     const schema = Joi.object().keys({
-      cityName: Joi.string().required(),
+      city: Joi.string().required(),
     });
-    const validation = schema.validate(cityName);
+    const validation = schema.validate({ ...args });
     if(validation.error){
       return {
         status: 400, 
@@ -59,7 +59,7 @@ exports.getRegionByName = async (cityName) => {
       };
     }
 
-    const region = await RegionRepository.getOneBy({ city: cityName.toLowerCase().trim() });
+    const region = await RegionRepository.getOneBy({ city: args.city.toLowerCase().trim() });
     if(!region){
       return {
         status: 404,
@@ -93,7 +93,7 @@ exports.getAllRegions = async (args) => {
       };
     }
 
-    const regions = await RegionRepository.getAll(skip, limit);
+    const regions = await RegionRepository.getAll(args.skip, args.limit);
 
     return {
       status: 200, 

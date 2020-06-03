@@ -25,7 +25,7 @@ class RegionRepository {
     try {
       let data;
 
-      if (payload.id) {
+      if (payload._id) {
         data = await update.bind(this)(payload);
       } else {
         data = await save.bind(this)(payload);

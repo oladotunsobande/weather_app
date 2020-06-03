@@ -6,6 +6,7 @@ const connection = require('../../config/db');
 const RegionSchema = new Schema(
   {
     id: {
+      type: String,
       required: [true, 'Id is required'],
       unique: 'Id exists ({VALUE})',
       trim: true

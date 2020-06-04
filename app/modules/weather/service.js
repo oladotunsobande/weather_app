@@ -20,7 +20,7 @@ function getCurrentDate(queryDate = null){
   return isoDate.split('T')[0];
 }
 
-exports.getWeatherByCity = async (args) => {
+exports.getWeatherByCity = async function (args) {
   try{
     const schema = Joi.object().keys({
       city: Joi.string().required(),
@@ -41,20 +41,23 @@ exports.getWeatherByCity = async (args) => {
 
     const currentDate = (args.searchDate) ? getCurrentDate(args.searchDate) : getCurrentDate();
 
-    const region = await getRegionByName(args.city);
+    const region = await getRegionByName({ city: args.city });
     if(region.success){
       weather = await WeatherRepository.getOneBy({ region: region._id });
-
-      const info = weather.details;
-
-      const data = info.filter((vl) => {
-        return vl.weatherDate.startsWith(currentDate);
-      });
-
-      if(data.length == 0){
+      if(!weather){
         callAPI = true;
       } else{
-        details = data[0].info;
+        const info = weather.details;
+
+        const data = info.filter((vl) => {
+          return vl.weatherDate.startsWith(currentDate);
+        });
+
+        if(data.length == 0){
+          callAPI = true;
+        } else{
+          details = data[0].info;
+        }
       }
     } else{
       callAPI = true;
@@ -64,6 +67,7 @@ exports.getWeatherByCity = async (args) => {
       // Call weatherstack api
       try{
         const resp = await callWeatherStackApi(args.city);
+      
         details = resp.current;
 
         // Save city weather data to db
@@ -72,22 +76,33 @@ exports.getWeatherByCity = async (args) => {
             weatherDate: new Date(currentDate),
             info: resp.current
           });
-          
-          await WeatherRepository.persist(weather);
-        } else{
-          const new_region = await addRegion({
-            city,
-            country: resp.location.country
-          });
 
+          await WeatherRepository.persist(weather);
+        } 
+        else if(region.success && !weather){
           await WeatherRepository.persist({
             id: uuidv4(),
-            region: new_region._id,
+            region: region.data._id,
             details: {
               weatherDate: new Date(currentDate),
               info: resp.current
             }
           })
+        } 
+        else{
+          const new_region = await addRegion({
+            city: args.city,
+            country: resp.location.country
+          });
+
+          await WeatherRepository.persist({
+            id: uuidv4(),
+            region: new_region.data._id,
+            details: {
+              weatherDate: new Date(currentDate),
+              info: resp.current
+            }
+          });
         }
 
       } catch(err){
@@ -103,4 +118,4 @@ exports.getWeatherByCity = async (args) => {
   } catch(error){
     throw error;
   }
-};
+}

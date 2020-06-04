@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const RegionRepository = new (require('./repository'))();
 
-exports.addRegion = async (args) => {
+exports.addRegion = async function (args) {
   try{
     const schema = Joi.object().keys({
       city: Joi.string().required(),
@@ -43,9 +43,9 @@ exports.addRegion = async (args) => {
   } catch(error){
     throw error;
   }
-};
+}
 
-exports.getRegionByName = async (args) => {
+exports.getRegionByName = async function (args) {
   try{
     const schema = Joi.object().keys({
       city: Joi.string().required(),
@@ -76,9 +76,9 @@ exports.getRegionByName = async (args) => {
   } catch(error){
     throw error;
   }
-};
+}
 
-exports.getAllRegions = async (args) => {
+exports.getAllRegions = async function (args) {
   try{
     const schema = Joi.object().keys({
       skip: Joi.string().optional(),
@@ -103,4 +103,4 @@ exports.getAllRegions = async (args) => {
   } catch(error){
     throw error;
   }
-};
+}

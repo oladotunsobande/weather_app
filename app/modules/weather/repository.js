@@ -6,7 +6,7 @@ class WeatherRepository {
   async getOne(id) {
     try{
       return await this.connection.findById(id)
-        .select('-_id -__v');
+        .select('-__v');
     } catch(error){
       throw error;
     }
@@ -15,7 +15,7 @@ class WeatherRepository {
   async getOneBy(query) {
     try {
       return await this.connection.findOne(query)
-        .select('-_id -__v');
+        .select('-__v');
     } catch (error) {
       throw error;
     }
@@ -25,7 +25,7 @@ class WeatherRepository {
     try {
       let data;
 
-      if (payload.id) {
+      if (payload._id) {
         data = await update.bind(this)(payload);
       } else {
         data = await save.bind(this)(payload);
@@ -43,7 +43,7 @@ class WeatherRepository {
     try {
       return await this.connection
         .find()
-        .select('-_id -__v')
+        .select('-__v')
         .sort({ createdAt: -1 })
         .skip(parseInt(skip))
         .limit(parseInt(limit));
@@ -56,7 +56,7 @@ class WeatherRepository {
     try {
       return await this.connection
         .find(query)
-        .select('-_id -__v')
+        .select('-__v')
         .sort({ createdAt: -1 })
         .skip(parseInt(skip))
         .limit(parseInt(limit));

@@ -9,18 +9,16 @@ async function callWeatherStackApi(query){
     };
 
     const path = `?access_key=${process.env.WEATHERSTACK_API_KEY}&query=${query}`;
-    const url = `${process.env.WEATHERSTACK_BASE_URL}${CURRENT_WEATHER_PATH}${path}`;
+    const url = `${process.env.WEATHERSTACK_BASE_URL}${process.env.CURRENT_WEATHER_PATH}${path}`;
 
-    let response = await axios.get(
+    return axios.get(
       url,
       headerConfig
-    );
-    
-    if(!response.data.success){
-      throw response.data.error.info;
-    }
-
-    return response.data;
+    )
+    .then((resp) => resp.data)
+    .catch((error) => {
+      throw error;
+    });
   } catch(error){
     console.error(`WeatherStack Error: ${JSON.stringify(error)}`);
 

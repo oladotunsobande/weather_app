@@ -34,7 +34,8 @@ module.exports.helloWorld = (event, context, callback) => {
 
 module.exports.getCityWeather = async (event, context, callback) => {
   try{
-    const payload = JSON.parse(event.query);
+    const value = (event.queryStringParameters) ? event.queryStringParameters.city : event.city;
+    const payload = { city: value };
 
     const data = await service.getWeatherByCity(payload);
     const response = formatResponse(data);

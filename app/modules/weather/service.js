@@ -116,6 +116,10 @@ exports.getWeatherByCity = async function (args) {
       data: details
     };
   } catch(error){
-    throw error;
+    throw {
+      status: 500,
+      success: false,
+      error
+    };
   }
 }

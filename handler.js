@@ -1,16 +1,49 @@
 'use strict';
 
-module.exports.helloWorld = (event, context, callback) => {
+const service = require('./app/modules/weather/service');
+
+function formatResponse(resp){
   const response = {
-    statusCode: 200,
+    statusCode: resp.status,
     headers: {
       'Access-Control-Allow-Origin': '*', // Required for CORS support to work
     },
     body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
+      success: resp.success,
+      data: resp.data,
+      message: resp.message,
+      error: resp.error,
+    })
   };
 
+  return response;
+}
+
+module.exports.helloWorld = (event, context, callback) => {
+  const data = {
+    status: 200,
+    success: true,
+    message: 'Go Serverless v1.0! Your function executed successfully!',
+    data: event,
+  };
+
+  const response = formatResponse(data);
+
   callback(null, response);
+};
+
+module.exports.getCityWeather = async (event, context, callback) => {
+  try{
+    const payload = JSON.parse(event.query);
+
+    const data = await service.getWeatherByCity(payload);
+    const response = formatResponse(data);
+
+    callback(null, response);
+  } catch(error){
+    console.error(error);
+
+    const err_resp = formatResponse(error);
+    callback(null, err_resp);
+  }
 };

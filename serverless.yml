@@ -15,11 +15,19 @@ provider:
 
 # The `functions` block defines what code to deploy
 functions:
+  # Test endpoint - helloworld
   helloWorld:
     handler: handler.helloWorld
-    # The `events` block defines how to trigger the handler.helloWorld code
     events:
       - http:
           path: hello-world
+          method: get
+          cors: true
+  # Fetch weather by city
+  getCityWeather:
+    handler: handler.getCityWeather
+    events:
+      - http:
+          path: weather/city
           method: get
           cors: true

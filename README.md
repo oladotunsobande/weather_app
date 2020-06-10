@@ -50,7 +50,6 @@ Install all dependencies:
 
 ```
 $ npm install
-
 ```
 
 Deploy your app to AWS using Serverless CLI:
